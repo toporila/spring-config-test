@@ -1,0 +1,49 @@
+server:
+  port: ${PORT:${SERVER_PORT:0}}
+
+info:
+  id: ${spring.application.name}
+
+logging:
+  level: debug
+
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+  health:
+    sensitive: false
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+feign:
+  hystrix:
+    enabled: true
+
+hystrix:
+  shareSecurityContext: true
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+
+---
+spring:
+  profiles: docker
+  zipkin:
+    baseUrl: http://zipkin-service:9411
+
+logging:
+  level: warn
+  logstash:
+    host: logstash
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-service:8761/eureka/
